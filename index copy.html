@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jogo da Memória EcoTech</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 50vh;
+            font-family: "Italic", sans-serif;
+            background-image:
+                linear-gradient(rgba(172, 224, 172, 0.596), rgba(175, 197, 180, 0.35)),
+                url("imagens/fundo.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: rgb(255, 255, 255);
+        }
+
+        .pagina {
+            min-height: 100vh;
+            padding: 135px 20px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cabecalho {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cabecalho h1 {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 3px 8px rgba(107, 223, 12, 0.432);
+        }
+
+        .cabecalho p {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            text-shadow: 0 2px 5px rgba(102, 255, 0, 0.7);
+        }
+
+        .jogo {
+            padding: 22px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 5px solid rgba(168, 197, 174, 0.35);
+            box-shadow:
+                0 15px 45px rgba(97, 167, 88, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+        }
+
+        #tabela {
+            border-spacing: 12px;
+            margin: 10px;
+        }
+
+        td {
+            padding: 0;
+        }
+
+        .carta {
+            width: 105px;
+            height: 105px;
+            display: block;
+            object-fit: cover;
+            cursor: pointer;
+            border: 4px solid rgba(157, 185, 157, 0.8);
+            border-radius: 20px;
+            background-color: rgb(255, 255, 255);
+            box-shadow:
+                0 7px 15px rgb(178, 216, 170),
+                inset 0 0 0 2px rgba(216, 241, 220, 0.973);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                filter 0.2s ease;
+        }
+
+        .carta:hover {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow:
+                0 12px 22px rgba(175, 212, 162, 0.986);
+            filter: brightness(1.08);
+        }
+
+        .carta:active {
+            transform: scale(0.96);
+        }
+
+        #mensagem {
+            display: none;
+            margin-top: 30px;
+            width: 430px;
+            max-width: 90%;
+            padding: 32px 28px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.94);
+            color: #3a583a;
+            border-radius: 25px;
+            border: 3px solid rgba(188, 214, 186, 0.9);
+            box-shadow: 0 15px 40px rgba(254, 255, 254, 0.815);
+            animation: aparecer 0.5s ease;
+        }
+
+        #mensagem h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        #mensagem p {
+            font-size: 17px;
+            line-height: 1.5;
+            margin-bottom: 22px;
+            color: #41664f;
+        }
+
+        button {
+            border: none;
+            padding: 13px 28px;
+            border-radius: 14px;
+            background: #357a52;
+            color: rgb(255, 255, 255);
+            font-family: "Quicksand", sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(255, 255, 255, 0.2);
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            background: #a3cab4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgb(247, 244, 244);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .pagina {
+                padding: 25px 10px 40px;
+            }
+
+            .cabecalho h1 {
+                font-size: 30px;
+            }
+
+            .cabecalho p {
+                font-size: 15px;
+            }
+
+            .jogo {
+                padding: 12px;
+                border-radius: 20px;
+            }
+
+            #tabela {
+                border-spacing: 5px;
+            }
+
+            .carta {
+                width: 70px;
+                height: 70px;
+                border-radius: 13px;
+                border-width: 3px;
+            }
+
+            #mensagem {
+                padding: 25px 20px;
+            }
+
+            #mensagem h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="pagina">
+
+        <div class="cabecalho">
+            <h1>☆☆ Jogo da Memória EcoTech ☆☆</h1>
+            <p>Encontre todos os pares!</p>
+        </div>
+
+        <div class="jogo">
+            <table id="tabela"></table>
+        </div>
+
+        <div id="mensagem">
+            <h2>Parabéns!</h2>
+
+            <p>
+                Você encontrou todos os pares e completou
+                o Jogo da Memória EcoTech!
+            </p>
+
+            <button onclick="reiniciarJogo()">
+                Reiniciar Jogo
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        var fotos = [
+            "sonic.webp", "sonic.webp",
+            "mouse.jpg", "mouse.jpg",
+            "cel.jpg", "cel.jpg",
+            "fonte.jpg", "fonte.jpg",
+            "tec.jpg", "tec.jpg",
+            "ram.jpg", "ram.jpg",
+            "imp.jpg", "imp.jpg",
+            "cabos.jpg", "cabos.jpg",
+            "gab.jpg", "gab.jpg",
+            "pen.jpg", "pen.jpg"
+        ];
+
+        var primeiraCarta = -1;
+        var segundaCarta = -1;
+        var bloqueado = false;
+        var paresEncontrados = 0;
+
+        window.onload = iniciaJogo;
+
+        function iniciaJogo() {
+
+            fotos.sort(function () {
+                return Math.random() - 0.5;
+            });
+
+            primeiraCarta = -1;
+            segundaCarta = -1;
+            bloqueado = false;
+            paresEncontrados = 0;
+
+            document.getElementById("mensagem").style.display = "none";
+
+            var tabela = document.getElementById("tabela");
+            tabela.innerHTML = "";
+
+            var linha;
+
+            for (var i = 0; i < fotos.length; i++) {
+
+                if (i % 5 === 0) {
+                    linha = document.createElement("tr");
+                    tabela.appendChild(linha);
+                }
+
+                var coluna = document.createElement("td");
+
+                var imagem = document.createElement("img");
+
+                imagem.id = "c" + i;
+                imagem.className = "carta";
+                imagem.src = "imagens/lixo.jpg";
+                imagem.alt = "Carta do jogo";
+                imagem.onclick = function () {
+                    virar(this);
+                };
+
+                coluna.appendChild(imagem);
+                linha.appendChild(coluna);
+            }
+        }
+
+        function virar(carta) {
+
+            var posicao = parseInt(carta.id.substring(1));
+
+            if (bloqueado) {
+                return;
+            }
+
+            if (posicao === primeiraCarta) {
+                return;
+            }
+
+            if (carta.src.includes(fotos[posicao])) {
+                return;
+            }
+
+            carta.src = "imagens/" + fotos[posicao];
+
+            if (primeiraCarta === -1) {
+
+                primeiraCarta = posicao;
+
+            } else {
+
+                segundaCarta = posicao;
+                bloqueado = true;
+
+                if (fotos[primeiraCarta] === fotos[segundaCarta]) {
+
+                    paresEncontrados++;
+
+                    primeiraCarta = -1;
+                    segundaCarta = -1;
+                    bloqueado = false;
+
+                    if (paresEncontrados === 10) {
+                        setTimeout(function () {
+                            document.getElementById("mensagem").style.display = "block";
+                        }, 300);
+                    }
+
+                } else {
+
+                    setTimeout(function () {
+
+                        document.getElementById(
+                            "c" + primeiraCarta
+                        ).src = "imagens/lixo.jpg";
+
+                        document.getElementById(
+                            "c" + segundaCarta
+                        ).src = "imagens/lixo.jpg";
+
+                        primeiraCarta = -1;
+                        segundaCarta = -1;
+                        bloqueado = false;
+
+                    }, 900);
+                }
+            }
+        }
+
+        function reiniciarJogo() {
+            iniciaJogo();
+        }
+    </script>
+
+</body>
+
+</html>
